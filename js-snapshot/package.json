@@ -1,0 +1,13 @@
+{
+  "name": "js-snapshot",
+  "version": "1.0.0",
+  "description": "A simple JavaScript snapshot utility",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js",
+    "start": "node index.js"
+  },
+  "keywords": ["snapshot", "javascript", "utility"],
+  "author": "Your Name",
+  "license": "MIT"
+}
