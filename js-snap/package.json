@@ -1,0 +1,14 @@
+{
+  "name": "js-snap",
+  "version": "1.0.0",
+  "description": "JavaScript快速启动模板",
+  "main": "js-snap.js",
+  "scripts": {
+    "start": "node js-snap.js",
+    "dev": "node --watch js-snap.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["javascript", "template", "boilerplate"],
+  "author": "JS-Snap",
+  "license": "MIT"
+}
