@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>冒泡排序可视化</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .array-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 300px;
+            margin: 20px 0;
+            gap: 5px;
+        }
+        
+        .bar {
+            width: 30px;
+            background-color: #3498db;
+            transition: height 0.3s ease;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 5px;
+            color: white;
+            font-size: 12px;
+        }
+        
+        .comparing {
+            background-color: #e74c3c; /* 红色表示正在比较的元素 */
+        }
+        
+        .sorted {
+            background-color: #2ecc71; /* 绿色表示已排序的元素 */
+        }
+        
+        .controls {
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        input {
+            padding: 8px;
+            width: 200px;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>冒泡排序可视化</h1>
+        <p>冒泡排序是一种简单的排序算法，它重复地遍历要排序的数列，一次比较两个元素，如果它们的顺序错误就交换它们。</p>
+        
+        <div class="controls">
+            <input type="text" id="arrayInput" value="64,34,25,12,22,11,90" placeholder="输入数字，用逗号分隔">
+            <button onclick="generateArray()">生成数组</button>
+            <button onclick="startSorting()">开始排序</button>
+            <button onclick="resetArray()">重置</button>
+        </div>
+        
+        <div class="array-container" id="arrayContainer"></div>
+        
+        <div id="status">点击"开始排序"按钮开始可视化冒泡排序</div>
+    </div>
+
+    <script>
+        let array = [];
+        let isSorting = false;
+        let originalArray = [];
+        
+        // 初始化数组
+        function initArray(input) {
+            const values = input.split(',').map(val => parseInt(val.trim())).filter(val => !isNaN(val));
+            array = [...values];
+            originalArray = [...values];
+            renderArray();
+        }
+        
+        // 渲染数组为可视化柱状图
+        function renderArray() {
+            const container = document.getElementById('arrayContainer');
+            container.innerHTML = '';
+            
+            const maxHeight = Math.max(...array, 100); // 确保有最小高度
+            
+            array.forEach((value, index) => {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.height = (value / maxHeight * 250) + 'px';
+                bar.textContent = value;
+                bar.dataset.index = index;
+                container.appendChild(bar);
+            });
+        }
+        
+        // 生成随机数组
+        function generateArray() {
+            if (isSorting) return;
+            
+            const input = document.getElementById('arrayInput').value;
+            if (input.trim() !== '') {
+                initArray(input);
+            } else {
+                // 生成随机数组
+                array = [];
+                for (let i = 0; i < 10; i++) {
+                    array.push(Math.floor(Math.random() * 100) + 1);
+                }
+                originalArray = [...array];
+                renderArray();
+            }
+        }
+        
+        // 重置数组
+        function resetArray() {
+            if (isSorting) return;
+            array = [...originalArray];
+            renderArray();
+            document.getElementById('status').textContent = '数组已重置';
+        }
+        
+        // 开始排序
+        async function startSorting() {
+            if (isSorting) return;
+            
+            isSorting = true;
+            document.getElementById('status').textContent = '正在排序...';
+            
+            const n = array.length;
+            const bars = document.querySelectorAll('.bar');
+            
+            for (let i = 0; i < n - 1; i++) {
+                let swapped = false;
+                
+                for (let j = 0; j < n - i - 1; j++) {
+                    // 高亮正在比较的元素
+                    bars[j].classList.add('comparing');
+                    bars[j + 1].classList.add('comparing');
+                    
+                    await sleep(500); // 暂停以显示动画效果
+                    
+                    if (array[j] > array[j + 1]) {
+                        // 交换元素
+                        [array[j], array[j + 1]] = [array[j + 1], array[j]];
+                        
+                        // 更新显示
+                        renderArray();
+                        
+                        swapped = true;
+                    }
+                    
+                    // 移除高亮
+                    bars[j].classList.remove('comparing');
+                    bars[j + 1].classList.remove('comparing');
+                }
+                
+                // 标记最后一个元素为已排序
+                bars[n - i - 1].classList.add('sorted');
+                
+                if (!swapped) {
+                    // 如果没有发生交换，说明数组已经有序
+                    break;
+                }
+            }
+            
+            // 标记第一个元素为已排序
+            if (array.length > 0) {
+                bars[0].classList.add('sorted');
+            }
+            
+            document.getElementById('status').textContent = '排序完成！';
+            isSorting = false;
+        }
+        
+        // 延迟函数，用于动画效果
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+        
+        // 页面加载时初始化
+        window.onload = function() {
+            generateArray();
+        };
+    </script>
+</body>
+</html>
