@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS快拍程序</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>JavaScript 快拍程序</h1>
+        
+        <div class="camera-container">
+            <video id="video" autoplay playsinline></video>
+            <canvas id="canvas" style="display: none;"></canvas>
+        </div>
+        
+        <div class="controls">
+            <button id="startBtn">开启摄像头</button>
+            <button id="snapBtn" disabled>拍照</button>
+            <button id="stopBtn" disabled>关闭摄像头</button>
+        </div>
+        
+        <div class="result">
+            <h3>拍摄结果:</h3>
+            <img id="photo" src="" alt="拍摄的照片将显示在这里" style="display: none;">
+            <a id="downloadLink" style="display: none;">下载照片</a>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
